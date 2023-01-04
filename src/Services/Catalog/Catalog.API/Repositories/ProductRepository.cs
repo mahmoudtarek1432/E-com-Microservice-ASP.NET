@@ -33,9 +33,12 @@ namespace Catalog.API.Repositories
                     .ToListAsync();
         }
 
-        public Task<IEnumerable<Product>> GetProducts()
+        public async Task<IEnumerable<Product>> GetProducts()
         {
-            throw new NotImplementedException();
+            return await _context
+                           .Products
+                           .Find(p => true)
+                           .ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> GetProductsByCategory(string CategoryName)
