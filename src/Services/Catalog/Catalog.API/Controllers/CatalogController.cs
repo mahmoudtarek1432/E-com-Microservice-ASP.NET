@@ -53,5 +53,28 @@ namespace Catalog.API.Controllers
             }
             return Ok(products);
         }
+
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
+        {
+            await _productRepo.createProduct(product);
+            return CreatedAtRoute("GetProduct", new { id = product.Id }, product);
+        }
+
+        [HttpPut]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateProduct([FromBody] Product product)
+        {
+            return Ok(await _productRepo.updateProduct(product));
+        }
+
+
+        [HttpDelete("{Id:length(24)}", Name = "DeleteProduct")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteProduct(string Id)
+        {
+            return Ok(await _productRepo.deleteProduct(Id));
+        }
     }
 }
