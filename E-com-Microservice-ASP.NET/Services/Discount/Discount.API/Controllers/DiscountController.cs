@@ -16,8 +16,8 @@ namespace Discount.API.Controllers
 
         public DiscountController(IDiscountRepository discountRepository, ILogger logger)
         {
-            _DiscountRepository = discountRepository?? throw new ArgumentNullException;
-            _logger = logger ?? throw new ArgumentNullException;
+            _DiscountRepository = discountRepository?? throw new ArgumentNullException();
+            _logger = logger ?? throw new ArgumentNullException();
         }
 
         [HttpGet("{CouponName}",Name="GetDiscount")]
