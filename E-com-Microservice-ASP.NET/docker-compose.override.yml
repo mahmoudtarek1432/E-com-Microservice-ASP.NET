@@ -9,11 +9,43 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  discountdb:
+    container_name: discountdb
+    restart: always
+    environment: 
+     - POSTGRES_USER=admin
+     - POSTGRES_PASSWORD=12345asdf
+     - POSTGRES_DB=DiscountDb
+    ports:
+      - "8090:8090"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+
   basketdb:
     container_name: basketdb
     restart: always
     ports:
       - "6379:6379"
+
+  pgadmin:
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@mahmoud.com
+      - PGADMIN_DEFAULT_PASSWORD=admin1234
+    restart: always
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/root/.pgadmin
+
+  portainer:
+    container_name: portainer
+    restart: always
+    ports:
+        - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
 
   catalog.api:
     container_name: catalog.api
