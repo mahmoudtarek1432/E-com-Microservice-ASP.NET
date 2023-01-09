@@ -12,23 +12,23 @@ namespace Discount.API.Controllers
     public class DiscountController : ControllerBase
     {
         private readonly IDiscountRepository _DiscountRepository;
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
 
-        public DiscountController(IDiscountRepository discountRepository, ILogger logger)
+        public DiscountController(IDiscountRepository discountRepository )
         {
             _DiscountRepository = discountRepository?? throw new ArgumentNullException();
-            _logger = logger ?? throw new ArgumentNullException();
+            //_logger = logger ?? throw new ArgumentNullException();
         }
 
         [HttpGet("{CouponName}",Name="GetDiscount")]
         [ProducesResponseType(typeof(Coupon), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<Coupon>> GetCoupon(string CouponName)
+        public async Task<ActionResult<Coupon>> GetDiscount(string CouponName)
         {
             var result = await _DiscountRepository.GetCoupon(CouponName);
             if (result == null)
             {
-                _logger.LogError($"Coupon name: {CouponName} is not valid");
+                //_logger.LogError($"Coupon name: {CouponName} is not valid");
                 return NotFound(result);
             }
             return Ok(result);

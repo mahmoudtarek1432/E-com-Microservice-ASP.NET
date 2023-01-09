@@ -17,7 +17,7 @@ services:
      - POSTGRES_PASSWORD=12345asdf
      - POSTGRES_DB=DiscountDb
     ports:
-      - "8090:8090"
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data 
 
@@ -65,4 +65,12 @@ services:
       - "basketdb"
     ports:
       - "8001:80"
-
+  discount.api:
+    container_name: discount.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5434;Database=DiscountDb;User Id=admin;Password=12345asdf;Timeout=300;CommandTimeout=300"
+    depends_on:
+      - discountdb
+    ports:
+      - "8002:80"
