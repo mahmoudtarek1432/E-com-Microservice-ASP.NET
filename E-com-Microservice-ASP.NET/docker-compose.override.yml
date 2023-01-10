@@ -69,7 +69,7 @@ services:
     container_name: discount.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:ConnectionString=host=host.docke.internal;Port=5434;Database=DiscountDb;User Id=admin;Password=12345asdf;Timeout=300;CommandTimeout=300"
+      - "DatabaseSettings:ConnectionString=host=host.docker.internal;Port=5434;Database=DiscountDb;User Id=admin;Password=12345asdf;Timeout=300;CommandTimeout=300"
     depends_on:
       - discountdb
     ports:
