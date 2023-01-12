@@ -31,10 +31,11 @@ namespace Basket.API.Controllers
         [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<ShoppingCart>> UpdateUserBasket([FromBody] ShoppingCart basket)
         {
-            foreach (var item in basket.Items)
+            await Task.WhenAll(basket.Items.Select(async i =>
             {
-                _discountGrpcService.GetDiscountCoupon(item.ProductName);
-            }
+                var coupon = await _discountGrpcService.GetDiscountCoupon(i.ProductName);
+                i.Price -= coupon.Amount;
+            }));
 
             var UpdatedBasket = await _BasketRepository.UpdateBasket(basket);
             return Ok(UpdatedBasket);
