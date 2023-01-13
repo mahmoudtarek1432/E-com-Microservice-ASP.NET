@@ -61,6 +61,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "CacheSettings:ConnectionString=basketdb:6379"
+      - "GrpcSettings:ConnectionString=discount.grpc"
     depends_on: 
       - "basketdb"
     ports:
@@ -74,3 +75,17 @@ services:
       - discountdb
     ports:
       - "8002:80"
+
+  discount.grpc:
+    container_name: discount.grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=host=host.docker.internal;Port=5434;Database=DiscountDb;User Id=admin;Password=12345asdf;Timeout=300;CommandTimeout=300"
+    ports:
+      - "8003:80"
+     
+    depends_on:
+      - discountdb
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
