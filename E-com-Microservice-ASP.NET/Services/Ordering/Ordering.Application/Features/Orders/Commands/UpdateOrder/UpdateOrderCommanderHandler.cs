@@ -36,7 +36,7 @@ namespace Ordering.Application.Features.Orders.Commands.UpdateOrder
 
             await _OrderRepository.UpdateAsync(OrderToUpdate);
 
-            _logger.LogInformation($"Order ID:{OrderToUpdate.Id} has been updated succefully");
+            _logger.LogInformation($"Order ID: {OrderToUpdate.Id} has been updated succefully");
 
             return Unit.Value;
         }
