@@ -19,6 +19,9 @@ namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder
                 .NotEmpty().WithMessage("{EmailAddress} should not be empty")
                 .NotNull();
 
+            RuleFor(p => p.TotalPrice)
+                .GreaterThan(0).WithMessage("{TotalPrice} should not be zero");
+
         }
     }
 }
