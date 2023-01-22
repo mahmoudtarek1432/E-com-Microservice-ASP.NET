@@ -12,7 +12,7 @@ using Ordering.Application.Behaviours;
 
 namespace Ordering.Application.Services
 {
-    public class ApplicationServices
+    public static class ApplicationServices
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {

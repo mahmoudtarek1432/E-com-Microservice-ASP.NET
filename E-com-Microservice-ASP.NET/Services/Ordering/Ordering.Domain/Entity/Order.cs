@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ordering.Domain.Entity
 {
-    public abstract class Order : EntityBase
+    public class Order : EntityBase
     {
         public string UserName { get; set; }
         public decimal TotalPrice { get; set; }
