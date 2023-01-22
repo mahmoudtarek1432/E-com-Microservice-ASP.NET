@@ -25,7 +25,7 @@ namespace Ordering.Application.Contracts.Persistance
 
         public Task<T> GetByIdAsync(int Id);
         public Task<T> AddAsync(T entity);
-        public Task<T> UpdateAsync(T entity);
-        public Task<T> DeleteAsync(T entity);
+        public Task UpdateAsync(T entity);
+        public Task DeleteAsync(T entity);
     }
 }
