@@ -1,4 +1,6 @@
+using Ordering.API.Extensions;
 using Ordering.Application.Services;
+using Ordering.Infrastructure.Persistence;
 using Ordering.Infrastructure.Service;
 using Ordering.Infrastructure.Service;
 
@@ -20,6 +22,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MigrateDB<OrderContext>((context, service) =>
+{
+    var Logger = service.GetService<ILogger<OrderContextSeed>>();
+    OrderContextSeed.seedAsync(context, Logger);
+});
 
 app.UseAuthorization();
 
