@@ -11,7 +11,7 @@ services:
     image: postgres
   
   orderdb:
-    image: docker pull mcr.microsoft.com/mssql/server
+    image:  mcr.microsoft.com/mssql/server:2022-latest
 
   portainer:
     image: portainer/portainer-ce
@@ -46,3 +46,4 @@ volumes:
   postgres_data:
   portainer_data:
   pgadmin_data:
+  mssql_data:

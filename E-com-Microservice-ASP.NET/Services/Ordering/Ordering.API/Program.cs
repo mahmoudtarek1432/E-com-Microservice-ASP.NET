@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 app.MigrateDB<OrderContext>((context, service) =>
 {
     var Logger = service.GetService<ILogger<OrderContextSeed>>();
-    OrderContextSeed.seedAsync(context, Logger);
+    OrderContextSeed.seedAsync(context, Logger).Wait();
 });
 
 app.UseAuthorization();

@@ -9,14 +9,14 @@ using System.Net;
 
 namespace Ordering.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
 
         private readonly IMediator _mediator;
 
-        OrderController(IMediator mediator)
+        public OrderController(IMediator mediator)
         {
             _mediator = mediator?? throw new ArgumentNullException(nameof(mediator));
         }
