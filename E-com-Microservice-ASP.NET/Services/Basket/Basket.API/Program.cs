@@ -2,9 +2,12 @@ using Basket.API.gRPCServices;
 using Basket.API.Repositories;
 using Discount.Grpc.Protos;
 using Grpc.Core;
+using MassTransit;
 using System.Threading.Channels;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAutoMapper(typeof(StartupBase));
 
 // Add services to the container.
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -13,6 +16,13 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 builder.Services.AddControllers();
 
+builder.Services.AddMassTransit(config =>
+{
+    config.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+    });
+});
 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
 builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(

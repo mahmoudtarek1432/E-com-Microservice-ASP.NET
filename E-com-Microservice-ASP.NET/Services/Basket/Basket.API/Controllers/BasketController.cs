@@ -1,6 +1,8 @@
-﻿using Basket.API.Entites;
+﻿using AutoMapper;
+using Basket.API.Entites;
 using Basket.API.gRPCServices;
 using Basket.API.Repositories;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -12,11 +14,15 @@ namespace Basket.API.Controllers
     {
         private readonly IBasketRepository _BasketRepository;
         private readonly DiscountGrpcSerice _discountGrpcService;
+        private readonly IMapper _mapper;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public BasketController(IBasketRepository BasketRepository,DiscountGrpcSerice discountGrpcSerice)
+        public BasketController(IPublishEndpoint publishEndpoint, IBasketRepository BasketRepository,DiscountGrpcSerice discountGrpcSerice, IMapper mapper)
         {
             _BasketRepository= BasketRepository ?? throw new ArgumentNullException();
             _discountGrpcService = discountGrpcSerice ?? throw new ArgumentNullException();
+            _mapper = mapper ?? throw new ArgumentNullException();
+            _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException();
         }
 
         [HttpGet("{UserName}", Name ="GetUserBasket")]
@@ -47,6 +53,27 @@ namespace Basket.API.Controllers
         {
             await _BasketRepository.DeleteBasket(UserName);
             return Ok();
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public async Task<IActionResult> Checkout([FromBody] BasketCheckout basketCheckout)
+        {
+            var basketItem = await _BasketRepository.GetBasket(basketCheckout.UserName);
+            if(basketItem == null)
+            {
+                return BadRequest();
+            }
+
+            var basketCheckoutEvent = _mapper.Map<BasketCheckout>(basketCheckout);
+
+            basketCheckoutEvent.TotalPrice = basketCheckout.TotalPrice;
+
+            await _publishEndpoint.Publish(basketCheckoutEvent);
+
+            await _BasketRepository.DeleteBasket(basketCheckout.UserName);
+
+            return Accepted();
         }
     }
 }

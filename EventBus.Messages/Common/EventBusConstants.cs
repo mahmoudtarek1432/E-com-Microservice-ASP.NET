@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EventBus.Messages.Common
 {
-    internal class EventBusConstants
+    public static class EventBusConstants
     {
+        public const string BasketCheckoutQueue = "basketcheckout-queue";
     }
 }
