@@ -65,7 +65,7 @@ namespace Basket.API.Controllers
                 return BadRequest();
             }
 
-            var basketCheckoutEvent = _mapper.Map<BasketCheckout>(basketCheckout);
+            var basketCheckoutEvent = _mapper.Map<BasketCheckout>(basketItem);
 
             basketCheckoutEvent.TotalPrice = basketCheckout.TotalPrice;
 
