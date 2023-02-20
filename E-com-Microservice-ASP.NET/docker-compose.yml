@@ -50,10 +50,17 @@ services:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
 
+  ocelotgw:
+    image: ${DOCKER_REGISTRY-}ocelotgw
+    build:
+      context: .
+      dockerfile: Gateway/OcelotGW/Dockerfile
+
 volumes:
   mongo_data:
   postgres_data:
   portainer_data:
   pgadmin_data:
   mssql_data:
+
 
