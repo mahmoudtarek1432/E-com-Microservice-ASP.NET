@@ -13,30 +13,32 @@ using System.Threading.Tasks;
 
 namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder
 {
-    internal class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderCommand, int>
+    public class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderCommand, int>
     {
-        public readonly IOrderRepository _orderRepository;
-        public readonly IMapper _mapper;
-        public readonly IEmailService _emailService;
+
         public readonly ILogger<CheckoutOrderCommandHandler> _logger;
+        private readonly IEmailService _emailService;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IMapper _mapper;
 
         public CheckoutOrderCommandHandler(IOrderRepository orderRepository, IMapper mapper,
                                            IEmailService emailservice, ILogger<CheckoutOrderCommandHandler> logger)
         {
-            _orderRepository= orderRepository?? throw new ArgumentNullException(nameof(orderRepository));
-            _mapper= mapper?? throw new ArgumentNullException(nameof(mapper));
-            _emailService= emailservice?? throw new ArgumentNullException(nameof(emailservice));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _orderRepository = orderRepository;
+            _mapper = mapper;
+            _logger = logger;
+            _emailService = emailservice;
         }
+
         public async Task<int> Handle(CheckoutOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = _mapper.Map<Order>(request);
+            var order = this._mapper.Map<Order>(request);
             var newOrder = await _orderRepository.AddAsync(order);
 
             _logger.LogInformation($"Order {newOrder.Id} has been created successfully");
             sendEmail(newOrder);
             return newOrder.Id;
-        }
+        } 
 
         public async void sendEmail(Order order)
         {
@@ -53,7 +55,7 @@ namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder
             }
             catch (Exception ex)
             {
-                _logger.LogError($"order #{order.Id} email wasnt successfully placed due to an email ex: {ex.Message}");
+                _logger.LogInformation($"order #{order.Id} email wasnt successfully placed due to an email ex: {ex.Message}");
             }
         }
     }

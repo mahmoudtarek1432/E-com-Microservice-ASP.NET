@@ -2,6 +2,7 @@
 using Basket.API.Entites;
 using Basket.API.gRPCServices;
 using Basket.API.Repositories;
+using EventBus.Messages.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -65,7 +66,7 @@ namespace Basket.API.Controllers
                 return BadRequest();
             }
 
-            var basketCheckoutEvent = _mapper.Map<BasketCheckout>(basketItem);
+            var basketCheckoutEvent = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
 
             basketCheckoutEvent.TotalPrice = basketCheckout.TotalPrice;
 

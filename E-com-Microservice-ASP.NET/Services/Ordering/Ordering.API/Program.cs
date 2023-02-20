@@ -6,9 +6,12 @@ using Ordering.Infrastructure.Persistence;
 using Ordering.Infrastructure.Service;
 using Ordering.Infrastructure.Service;
 using EventBus.Messages.Events;
+using Ordering.API.EventConsumer;
+using EventBus.Messages.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add services to the container.
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureService(builder.Configuration);
@@ -20,12 +23,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMassTransit(config =>
 {
 
-    config.AddConsumer<BasketCheckoutEvent>();
+    config.AddConsumer<BasketCheckoutConsumer>();
+
     config.UsingRabbitMq((ctx, cfg) =>
     {
         cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+
+        cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue,c =>
+        {
+            c.ConfigureConsumer<BasketCheckoutConsumer>(ctx);
+        });
     });
 });
+
+builder.Services.AddScoped<BasketCheckoutConsumer>();
 
 var app = builder.Build();
 

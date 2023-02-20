@@ -7,8 +7,7 @@ using System.Threading.Channels;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAutoMapper(typeof(StartupBase));
-
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Add services to the container.
 builder.Services.AddStackExchangeRedisCache(options =>
 {
