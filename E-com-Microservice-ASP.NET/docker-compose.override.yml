@@ -124,6 +124,7 @@ services:
 
 
   ocelotgw:
+    container_name: ocelot
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
